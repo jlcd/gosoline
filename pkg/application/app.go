@@ -3,7 +3,8 @@ package application
 import (
 	"context"
 	"fmt"
-
+	"os"
+	"path/filepath"
 	"github.com/justtrackio/gosoline/pkg/appctx"
 	"github.com/justtrackio/gosoline/pkg/cfg"
 	"github.com/justtrackio/gosoline/pkg/kernel"
@@ -35,10 +36,13 @@ func (a *App) addSetupOption(opt SetupOption) {
 }
 
 func Default(options ...Option) kernel.Kernel {
+	ex, _ := os.Executable()
+	configFilePath := filepath.Join(filepath.Dir(ex), "config.dist.yml")
+
 	defaults := []Option{
 		WithApiHealthCheck,
 		WithConfigErrorHandlers(defaultErrorHandler),
-		WithConfigFile("./config.dist.yml", "yml"),
+		WithConfigFile(configFilePath, "yml"),
 		WithConfigFileFlag,
 		WithConfigEnvKeyReplacer(cfg.DefaultEnvKeyReplacer),
 		WithConfigSanitizers(cfg.TimeSanitizer),

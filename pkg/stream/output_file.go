@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"sync"
 
 	"github.com/justtrackio/gosoline/pkg/cfg"
@@ -45,7 +46,9 @@ func (o *fileOutput) Write(_ context.Context, batch []WritableMessage) error {
 	o.lck.Lock()
 	defer o.lck.Unlock()
 
-	filename := o.settings.Filename
+	ex, _ := os.Executable()
+	filename := filepath.Join(filepath.Dir(ex),  o.settings.Filename)
+
 	flags := os.O_CREATE | os.O_WRONLY
 
 	switch o.settings.Mode {

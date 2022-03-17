@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/justtrackio/gosoline/pkg/cfg"
 )
@@ -27,7 +28,10 @@ func NewIoWriterFile(path string) (io.Writer, error) {
 	var err error
 	var file *os.File
 
-	if file, err = os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0o600); err != nil {
+	ex, _ := os.Executable()
+	logfilePath := filepath.Join(filepath.Dir(ex), path)
+
+	if file, err = os.OpenFile(logfilePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0o600); err != nil {
 		return nil, fmt.Errorf("can not open file %s to write logs to: %w", path, err)
 	}
 

@@ -3,7 +3,8 @@ package cli
 import (
 	"context"
 	"time"
-
+	"os"
+	"path/filepath"
 	"github.com/justtrackio/gosoline/pkg/appctx"
 	"github.com/justtrackio/gosoline/pkg/cfg"
 	"github.com/justtrackio/gosoline/pkg/kernel"
@@ -14,9 +15,12 @@ type kernelSettings struct {
 }
 
 func Run(module kernel.ModuleFactory, otherModuleMaps ...map[string]kernel.ModuleFactory) {
+	ex, _ := os.Executable()
+	configFilePath := filepath.Join(filepath.Dir(ex), "config.dist.yml")
+
 	configOptions := []cfg.Option{
 		cfg.WithErrorHandlers(defaultErrorHandler),
-		cfg.WithConfigFile("./config.dist.yml", "yml"),
+		cfg.WithConfigFile(configFilePath, "yml"),
 		cfg.WithConfigFileFlag("config"),
 	}
 

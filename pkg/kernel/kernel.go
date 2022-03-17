@@ -13,7 +13,7 @@ import (
 	"github.com/justtrackio/gosoline/pkg/coffin"
 	"github.com/justtrackio/gosoline/pkg/conc"
 	"github.com/justtrackio/gosoline/pkg/log"
-	"golang.org/x/sys/unix"
+	"syscall"
 )
 
 const (
@@ -82,7 +82,7 @@ func (k *kernel) Run() {
 
 	runHandler := func() {
 		sig := make(chan os.Signal, 2)
-		signal.Notify(sig, unix.SIGTERM, unix.SIGINT)
+		signal.Notify(sig, syscall.SIGTERM, syscall.SIGINT)
 
 		for _, stageIndex := range k.stages.getIndices() {
 			k.stages[stageIndex].run(k)

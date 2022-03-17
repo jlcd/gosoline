@@ -13,7 +13,7 @@ import (
 	"github.com/justtrackio/gosoline/pkg/log/status"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"golang.org/x/sys/unix"
+	"syscall"
 )
 
 func TestModule(t *testing.T) {
@@ -36,7 +36,7 @@ func TestModule(t *testing.T) {
 		cancel()
 	}).Once()
 
-	err = unix.Kill(unix.Getpid(), unix.SIGUSR1)
+	err = syscall.Kill(syscall.Getpid(), syscall.SIGUSR1)
 	assert.NoError(t, err)
 
 	err = cfn.Wait()

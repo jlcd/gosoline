@@ -40,6 +40,10 @@ type Client interface {
 	SetProxyUrl(p string)
 	SetCookies(cs []*http.Cookie)
 	SetCookie(c *http.Cookie)
+	RemoveProxyUrl()
+	SetCookieJar(jar http.CookieJar)
+	GetCookies() []*http.Cookie
+	DeleteCookies()
 	SetRedirectValidator(allowRequest func(request *http.Request) bool)
 	AddRetryCondition(f RetryConditionFunc)
 	NewRequest() *Request
@@ -107,7 +111,7 @@ func NewHttpClient(config cfg.Config, logger log.Logger) Client {
 	httpClient.SetRetryWaitTime(settings.RetryWaitTime)
 	httpClient.SetRetryMaxWaitTime(settings.RetryMaxWaitTime)
 
-	return NewHttpClientWithInterfaces(logger, c, mo, httpClient)
+	return NewHttpClientWithInterfaces(logger, c, mo, newCookieAwareRestyClient(httpClient))
 }
 
 func NewHttpClientWithInterfaces(logger log.Logger, c clock.Clock, mo metric.Writer, httpClient restyClient) Client {
@@ -144,6 +148,18 @@ func (c *client) SetCookies(cs []*http.Cookie) {
 	c.http.SetCookies(cs)
 }
 
+func (c *client) SetCookieJar(jar http.CookieJar) {
+	c.http.SetCookieJar(jar)
+}
+
+func (c *client) GetCookies() []*http.Cookie {
+	return c.http.GetCookies()
+}
+
+func (c *client) DeleteCookies() {
+	c.http.DeleteCookies()
+}
+
 func (c *client) SetTimeout(timeout time.Duration) {
 	c.http.SetTimeout(timeout)
 }
@@ -154,6 +170,10 @@ func (c *client) SetUserAgent(ua string) {
 
 func (c *client) SetProxyUrl(p string) {
 	c.http.SetProxy(p)
+}
+
+func (c *client) RemoveProxyUrl() {
+	c.http.RemoveProxy()
 }
 
 func (c *client) AddRetryCondition(f RetryConditionFunc) {

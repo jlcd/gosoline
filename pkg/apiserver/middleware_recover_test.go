@@ -4,13 +4,13 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"syscall"
 	"testing"
 
 	"github.com/gin-gonic/gin"
 	"github.com/justtrackio/gosoline/pkg/apiserver"
 	logMocks "github.com/justtrackio/gosoline/pkg/log/mocks"
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/sys/unix"
 )
 
 func TestRecoveryWithSentryCaseNil(t *testing.T) {
@@ -65,7 +65,7 @@ func TestRecoveryWithSentryCaseResponseBodyWriterAndConnectionErrors(t *testing.
 	r := gin.New()
 	r.Use(apiserver.RecoveryWithSentry(loggerMock))
 	r.Use(func(c *gin.Context) {
-		err := apiserver.ResponseBodyWriterError{Err: unix.EPIPE}
+		err := apiserver.ResponseBodyWriterError{Err: syscall.EPIPE}
 		panic(err)
 	})
 

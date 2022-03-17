@@ -11,7 +11,7 @@ import (
 	"github.com/justtrackio/gosoline/pkg/exec"
 	"github.com/justtrackio/gosoline/pkg/log/mocks"
 	"github.com/stretchr/testify/suite"
-	"golang.org/x/sys/unix"
+	"syscall"
 )
 
 type ExecutorBackoffTestSuite struct {
@@ -159,9 +159,9 @@ func (s *ExecutorBackoffTestSuite) TestConnectionError() {
 	tries := 0
 	client := exec.NewTestHttpClient(time.Minute, exec.Trips{
 		exec.DoTrip(time.Millisecond, io.EOF),
-		exec.DoTrip(time.Millisecond, unix.ECONNREFUSED),
-		exec.DoTrip(time.Millisecond, unix.ECONNRESET),
-		exec.DoTrip(time.Millisecond, unix.EPIPE),
+		exec.DoTrip(time.Millisecond, syscall.ECONNREFUSED),
+		exec.DoTrip(time.Millisecond, syscall.ECONNRESET),
+		exec.DoTrip(time.Millisecond, syscall.EPIPE),
 		exec.DoTrip(time.Millisecond, nil),
 	})
 
@@ -178,8 +178,8 @@ func (s *ExecutorBackoffTestSuite) TestConnectionError() {
 func (s *ExecutorBackoffTestSuite) TestTimeOutError() {
 	tries := 0
 	client := exec.NewTestHttpClient(time.Minute, exec.Trips{
-		exec.DoTrip(time.Millisecond, unix.ETIMEDOUT),
-		exec.DoTrip(time.Millisecond, unix.ETIMEDOUT),
+		exec.DoTrip(time.Millisecond, syscall.ETIMEDOUT),
+		exec.DoTrip(time.Millisecond, syscall.ETIMEDOUT),
 		exec.DoTrip(time.Millisecond, nil),
 	})
 

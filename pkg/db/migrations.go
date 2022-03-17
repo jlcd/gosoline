@@ -8,6 +8,9 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jmoiron/sqlx"
 	"github.com/justtrackio/gosoline/pkg/log"
+	"os"
+	"path/filepath"
+	"runtime"
 )
 
 type MigrationSettings struct {
@@ -40,7 +43,14 @@ func runMigrations(logger log.Logger, settings Settings, db *sqlx.DB) error {
 		return fmt.Errorf("could not get migration driver: %w", err)
 	}
 
-	m, err := migrate.NewWithDatabaseInstance(settings.Migrations.Path, settings.Driver, driver)
+	ex, _ := os.Executable()
+	migrationsAbsoluteFilePath := filepath.Join(filepath.Dir(ex), settings.Migrations.Path)
+
+	if runtime.GOOS == "windows" {
+		migrationsAbsoluteFilePath = filepath.ToSlash(migrationsAbsoluteFilePath)
+	}
+
+	m, err := migrate.NewWithDatabaseInstance(fmt.Sprintf("file://%s",migrationsAbsoluteFilePath), settings.Driver, driver)
 	if err != nil {
 		return fmt.Errorf("could not initialize migrator for db migrations: %w", err)
 	}
