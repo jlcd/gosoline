@@ -4,11 +4,11 @@ import (
 	"context"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/justtrackio/gosoline/pkg/cfg"
 	"github.com/justtrackio/gosoline/pkg/kernel"
 	"github.com/justtrackio/gosoline/pkg/log"
-	"golang.org/x/sys/unix"
 )
 
 type module struct {
@@ -24,7 +24,7 @@ type module struct {
 func NewModule(statusManager Manager) kernel.ModuleFactory {
 	return func(ctx context.Context, config cfg.Config, logger log.Logger) (kernel.Module, error) {
 		sigChan := make(chan os.Signal, 1)
-		signal.Notify(sigChan, unix.SIGUSR1)
+		signal.Notify(sigChan, syscall.SIGUSR1)
 
 		return &module{
 			logger:        logger.WithChannel("status"),
