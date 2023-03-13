@@ -8,7 +8,7 @@ require (
 	github.com/alicebob/miniredis v2.5.0+incompatible
 	github.com/aws/aws-lambda-go v1.29.0
 	github.com/aws/aws-sdk-go v1.43.40
-	github.com/aws/aws-sdk-go-v2 v1.16.2
+	github.com/aws/aws-sdk-go-v2 v1.17.6
 	github.com/aws/aws-sdk-go-v2/config v1.15.3
 	github.com/aws/aws-sdk-go-v2/credentials v1.11.2
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.8.4
@@ -21,11 +21,11 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/rds v1.18.4
 	github.com/aws/aws-sdk-go-v2/service/resourcegroupstaggingapi v1.13.4
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.26.5
-	github.com/aws/aws-sdk-go-v2/service/sns v1.17.4
+	github.com/aws/aws-sdk-go-v2/service/sns v1.20.5
 	github.com/aws/aws-sdk-go-v2/service/sqs v1.18.3
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.24.1
 	github.com/aws/aws-xray-sdk-go v1.7.0
-	github.com/aws/smithy-go v1.11.2
+	github.com/aws/smithy-go v1.13.5
 	github.com/cenkalti/backoff v2.2.1+incompatible
 	github.com/cenkalti/backoff/v4 v4.1.2
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -61,6 +61,7 @@ require (
 	github.com/ory/ladon v1.2.0
 	github.com/oschwald/geoip2-golang v1.7.0
 	github.com/pkg/errors v0.9.1
+	github.com/prometheus/client_golang v1.12.1
 	github.com/sha1sum/aws_signing_client v0.0.0-20170514202702-9088e4c7b34b
 	github.com/spf13/cast v1.4.1
 	github.com/stretchr/testify v1.7.1
@@ -88,8 +89,8 @@ require (
 	github.com/apache/thrift v0.13.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.4.1 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.12.3 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.9 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.3 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.30 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.24 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.3.10 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/v4a v1.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.13.3 // indirect
@@ -149,7 +150,6 @@ require (
 	github.com/oschwald/maxminddb-golang v1.9.0 // indirect
 	github.com/pborman/uuid v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v1.12.1 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/prometheus/procfs v0.7.3 // indirect
