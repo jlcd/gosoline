@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	baseRedis "github.com/go-redis/redis/v8"
 	"github.com/justtrackio/gosoline/pkg/cfg"
 	"github.com/justtrackio/gosoline/pkg/exec"
 	"github.com/justtrackio/gosoline/pkg/log"
+	baseRedis "github.com/redis/go-redis/v9"
 )
 
 const (
@@ -43,6 +43,8 @@ type Client interface {
 
 	BLPop(ctx context.Context, timeout time.Duration, keys ...string) ([]string, error)
 	LPop(ctx context.Context, key string) (string, error)
+	LMPop(ctx context.Context, direction string, count int64, key string) (string, []string, error)
+	LRange(ctx context.Context, key string, start int64, stop int64) ([]string, error)
 	LLen(ctx context.Context, key string) (int64, error)
 	RPush(ctx context.Context, key string, values ...interface{}) (int64, error)
 
@@ -223,6 +225,23 @@ func (c *redisClient) LPop(ctx context.Context, key string) (string, error) {
 	return cmd.(*baseRedis.StringCmd).Val(), err
 }
 
+func (c *redisClient) LMPop(ctx context.Context, direction string, count int64, key string) (string, []string, error) {
+	cmd, err := c.execute(ctx, func() ErrCmder {
+		return c.base.LMPop(ctx, direction, count, key)
+	})
+
+	key, values := cmd.(*baseRedis.KeyValuesCmd).Val()
+	return key, values, err
+}
+
+func (c *redisClient) LRange(ctx context.Context, key string, start int64, stop int64) ([]string, error) {
+	cmd, err := c.execute(ctx, func() ErrCmder {
+		return c.base.LRange(ctx, key, start, stop)
+	})
+
+	return cmd.(*baseRedis.StringSliceCmd).Val(), err
+}
+
 func (c *redisClient) LLen(ctx context.Context, key string) (int64, error) {
 	cmd, err := c.execute(ctx, func() ErrCmder {
 		return c.base.LLen(ctx, key)
@@ -286,7 +305,7 @@ func (c *redisClient) HGetAll(ctx context.Context, key string) (map[string]strin
 		return c.base.HGetAll(ctx, key)
 	})
 
-	return cmd.(*baseRedis.StringStringMapCmd).Val(), err
+	return cmd.(*baseRedis.MapStringStringCmd).Val(), err
 }
 
 func (c *redisClient) HSetNX(ctx context.Context, key, field string, value interface{}) (bool, error) {
