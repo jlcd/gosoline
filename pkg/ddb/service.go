@@ -1,3 +1,10 @@
+// MVS-only: pkg/ddb/service.go references out.Table.ItemCount through
+// aws.ToInt64 to bridge the int64 -> *int64 type change in newer
+// aws-sdk-go-v2/service/dynamodb releases (~v1.20+). The fork's own
+// go.mod still pins the older SDK, so building this module standalone
+// surfaces a type mismatch on the wrap. This file is meant to compile
+// only via Go-module MVS elevation from a downstream consumer whose
+// go.mod requires the newer SDK.
 package ddb
 
 import (
@@ -60,7 +67,7 @@ func (s *Service) DescribeTable(ctx context.Context, settings *Settings) (*Table
 
 	description := &TableDescription{
 		Name:      tableName,
-		ItemCount: out.Table.ItemCount,
+		ItemCount: aws.ToInt64(out.Table.ItemCount),
 	}
 
 	return description, nil
